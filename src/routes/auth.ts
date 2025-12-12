@@ -39,13 +39,14 @@ router.post("/login", async (req, res) => {
 
     // 비밀번호 매칭 확인
     const isMatched = await bcrypt.compare(password, user.password);
-    if (isMatched) return res.status(400).json({ message: "비밀번호가 일치하지 않습니다." });
+    if (!isMatched) return res.status(400).json({ message: "비밀번호가 일치하지 않습니다." });
 
     req.session.user = {
       id: user._id,
       userId: user.userId,
       nickname: user.nickname,
       profile: user.profile,
+      description: user.description,
     };
 
     res.status(200).json(req.session.user);
