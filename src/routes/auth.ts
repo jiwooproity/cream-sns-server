@@ -10,7 +10,7 @@ router.get("/me", (req, res) => {
   if (req.session.user) {
     res.status(200).json(req.session.user);
   } else {
-    res.status(500).json({ message: "로그인 상태가 아닙니다." });
+    res.status(401).json({ message: "로그인 상태가 아닙니다." });
   }
 });
 
