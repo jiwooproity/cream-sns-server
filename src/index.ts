@@ -1,3 +1,5 @@
+import "module-alias/register";
+
 import { type CipherKey } from "crypto";
 
 import dotenv from "dotenv";
