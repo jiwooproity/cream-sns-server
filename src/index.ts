@@ -15,6 +15,7 @@ import MongoStore from "connect-mongo";
 // Routes
 import auth from "@/routes/auth";
 import profile from "@/routes/profile";
+import post from "@/routes/post";
 
 // .env
 const { PORT, MONGO_URI, SESSION_SECRET } = process.env;
@@ -43,5 +44,6 @@ app.use(initSession);
 // Router
 app.use("/auth", auth);
 app.use("/profile", profile);
+app.use("/post", profile);
 
 app.listen(PORT, () => console.log(`Server online on port: ${PORT}`));
