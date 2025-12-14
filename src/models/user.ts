@@ -7,7 +7,13 @@ const userSchema = new mongoose.Schema({
   nickname: { type: String, required: true },
   password: { type: String, required: true },
   description: { type: String, default: "" },
-  profile: { type: String, default: defaultProfile },
+  profile: {
+    type: { url: String, public_id: String },
+    default: {
+      url: defaultProfile,
+      public_id: "",
+    },
+  },
 });
 
 export default mongoose.model("User", userSchema);

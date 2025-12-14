@@ -1,7 +1,12 @@
 import streamifier from "streamifier";
 
 // Image Storage
-import { v2 as cloudinary, UploadApiOptions, UploadResponseCallback } from "cloudinary";
+import {
+  v2 as cloudinary,
+  UploadApiOptions,
+  UploadApiResponse,
+  UploadResponseCallback,
+} from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -9,12 +14,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
-function uploadToCloudinary(
+export function uploadToCloudinary(
   file: Express.Multer.File,
   options: {
     folder: string;
   }
-): Promise<string> {
+): Promise<{ url: string; public_id: string } | undefined> {
   return new Promise((resolve, reject) => {
     const upload_option: UploadApiOptions = {
       folder: options.folder,
@@ -23,8 +28,12 @@ function uploadToCloudinary(
     };
 
     const callback: UploadResponseCallback = (error, result) => {
-      if (error || !result) return resolve("");
-      resolve(result.secure_url);
+      if (error || !result) {
+        resolve(undefined);
+      } else {
+        const { secure_url, public_id } = result;
+        resolve({ url: secure_url, public_id });
+      }
     };
 
     const stream = cloudinary.uploader.upload_stream(upload_option, callback);
@@ -32,4 +41,16 @@ function uploadToCloudinary(
   });
 }
 
-export default uploadToCloudinary;
+export function deleteInCloudinary(public_id: string): Promise<UploadApiResponse | undefined> {
+  return new Promise((resolve, reject) => {
+    const callback: UploadResponseCallback = (error, result) => {
+      if (error || !result) {
+        resolve(undefined);
+      } else {
+        resolve(result);
+      }
+    };
+
+    cloudinary.uploader.destroy(public_id, {}, callback);
+  });
+}

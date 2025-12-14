@@ -8,7 +8,10 @@ declare module "express-session" {
       userId?: string;
       nickname?: string;
       description?: string;
-      profile?: string;
+      profile: {
+        url?: string;
+        public_id?: string;
+      };
     };
   }
 }
