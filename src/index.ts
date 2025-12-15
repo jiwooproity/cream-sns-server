@@ -1,4 +1,4 @@
-import "module-alias/register";
+// import "module-alias/register";
 
 import { type CipherKey } from "crypto";
 
@@ -46,6 +46,6 @@ app.use(initSession);
 // Router
 app.use("/auth", auth);
 app.use("/profile", profile);
-app.use("/post", profile);
+app.use("/post", post);
 
 app.listen(PORT, () => console.log(`Server online on port: ${PORT}`));

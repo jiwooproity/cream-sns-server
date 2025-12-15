@@ -9,10 +9,7 @@ const userSchema = new mongoose.Schema({
   description: { type: String, default: "" },
   profile: {
     type: { url: String, public_id: String },
-    default: {
-      url: defaultProfile,
-      public_id: "",
-    },
+    default: { url: defaultProfile, public_id: "" },
   },
 });
 

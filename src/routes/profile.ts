@@ -1,27 +1,13 @@
 import express from "express";
 
 // Parser
-import multer from "multer";
+import upload from "@/upload/config";
 
 // Models
 import User from "@/models/user";
 
 // Image upload
 import { uploadToCloudinary, deleteInCloudinary } from "@/upload/uploadToCloudinary";
-
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 5 * 1024 * 1024,
-  },
-  fileFilter: (_, file, cb) => {
-    if (!file.mimetype.startsWith("image/")) {
-      cb(new Error("이미지 파일"));
-    } else {
-      cb(null, true);
-    }
-  },
-});
 
 const router = express.Router();
 
