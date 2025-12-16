@@ -12,7 +12,7 @@ import { deleteInCloudinary, uploadToCloudinary } from "@/upload/uploadToCloudin
 const router = express();
 
 async function getPosts(userId: string) {
-  const posts = await Post.find({ userId }, "-image._id");
+  const posts = await Post.find({ userId }, "-image._id").sort({ createdAt: -1 });
 
   return posts.map((post) => ({
     postId: post.id,
@@ -34,14 +34,14 @@ router.get("/list", async (req, res) => {
 
 router.post("/create", upload.single("image"), async (req, res) => {
   const { file } = req;
-  const { content } = req.body;
+  const { content, createdAt } = req.body;
 
   const userId = req.session.user?.id;
 
   const image = await uploadToCloudinary(file!, { folder: "cream/post" });
 
   try {
-    const post = new Post({ userId, image, content });
+    const post = new Post({ userId, image, content, createdAt });
     await post.save();
 
     const posts = await getPosts(userId);

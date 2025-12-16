@@ -18,6 +18,8 @@ import MongoStore from "connect-mongo";
 import auth from "@/routes/auth";
 import profile from "@/routes/profile";
 import post from "@/routes/post";
+import follows from "@/routes/follows";
+import feed from "@/routes/feed";
 
 // .env
 const { PORT, MONGO_URI, SESSION_SECRET } = process.env;
@@ -47,5 +49,7 @@ app.use(initSession);
 app.use("/auth", auth);
 app.use("/profile", profile);
 app.use("/post", post);
+app.use("/follows", follows);
+app.use("/feed", feed);
 
 app.listen(PORT, () => console.log(`Server online on port: ${PORT}`));
