@@ -1,14 +1,23 @@
-import mongoose, { Types } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const postSchema = new mongoose.Schema({
-  userId: { type: Types.ObjectId, required: true },
-  content: { type: String, required: true },
-  image: { type: { url: String, public_id: String } },
-  createdAt: { type: Number, required: true },
-});
-
-postSchema.virtual("id").get(function () {
-  return this._id.toString();
-});
+const postSchema = new mongoose.Schema(
+  {
+    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    content: { type: String, required: true },
+    image: { type: { url: String, public_id: String } },
+    createdAt: { type: Number, required: true },
+  },
+  {
+    toJSON: {
+      transform(doc, ret) {
+        ret.id = ret._id.toString();
+        delete ret._id;
+        delete ret.__v;
+        return ret;
+      },
+    },
+    versionKey: false,
+  }
+);
 
 export default mongoose.model("Post", postSchema);
