@@ -14,13 +14,13 @@ const router = express.Router();
 router.patch("/edit", upload.single("image"), async (req, res) => {
   const { file } = req;
   const { nickname, description } = req.body;
-  const { profile, userId } = req.session.user!;
+  const { profile, id } = req.session.user!;
 
   // 이미지 URL
   let image;
 
   try {
-    const user = await User.findOne({ userId });
+    const user = await User.findOne({ id });
     if (!user) return res.status(400).json({ message: "사용자를 찾을 수 없습니다." });
 
     // 이미지 파일 업로드

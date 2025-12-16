@@ -11,8 +11,8 @@ import { deleteInCloudinary, uploadToCloudinary } from "@/upload/uploadToCloudin
 
 const router = express();
 
-async function getPosts(userId: string) {
-  const posts = await Post.find({ userId }, "-image._id").sort({ createdAt: -1 });
+async function getPosts(author: string) {
+  const posts = await Post.find({ author }, "-image._id").sort({ createdAt: -1 });
 
   return posts.map((post) => ({
     postId: post.id,
@@ -22,10 +22,10 @@ async function getPosts(userId: string) {
 }
 
 router.get("/list", async (req, res) => {
-  const userId = req.session.user?.id;
+  const id = req.session.user?.id;
 
   try {
-    const posts = await getPosts(userId);
+    const posts = await getPosts(id);
     res.status(200).json(posts);
   } catch (e) {
     res.status(500).json({ message: "포스트 목록을 불러오는데 실패하였습니다." });
@@ -36,15 +36,15 @@ router.post("/create", upload.single("image"), async (req, res) => {
   const { file } = req;
   const { content, createdAt } = req.body;
 
-  const userId = req.session.user?.id;
+  const id = req.session.user?.id;
 
   const image = await uploadToCloudinary(file!, { folder: "cream/post" });
 
   try {
-    const post = new Post({ userId, image, content, createdAt });
+    const post = new Post({ author: id, image, content, createdAt });
     await post.save();
 
-    const posts = await getPosts(userId);
+    const posts = await getPosts(id);
     res.status(200).json(posts);
   } catch (e) {
     if (image?.public_id) deleteInCloudinary(image.public_id);

@@ -7,10 +7,10 @@ const router = express();
 router.post("/add", async (req, res) => {
   const { targetId } = req.body;
 
-  const userId = req.session.user?.id;
+  const id = req.session.user?.id;
 
   try {
-    const follows = new Follows({ from: userId, to: targetId });
+    const follows = new Follows({ from: id, to: targetId });
     await follows.save();
     res.status(200).json({ message: "팔로우 완료" });
   } catch (e) {
