@@ -1,9 +1,10 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 const postSchema = new mongoose.Schema({
-  userId: { type: String, required: true },
+  userId: { type: Types.ObjectId, required: true },
   content: { type: String, required: true },
   image: { type: { url: String, public_id: String } },
+  createdAt: { type: Number, required: true },
 });
 
 postSchema.virtual("id").get(function () {
