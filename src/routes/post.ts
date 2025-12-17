@@ -15,7 +15,7 @@ async function getPosts(author: string) {
   const posts = await Post.find({ author }, "-image._id").sort({ createdAt: -1 });
 
   return posts.map((post) => ({
-    postId: post.id,
+    id: post.id,
     content: post.content,
     image: post.image,
   }));
