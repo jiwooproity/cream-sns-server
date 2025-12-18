@@ -21,8 +21,8 @@ async function getPosts(author: string) {
   }));
 }
 
-router.get("/list", async (req, res) => {
-  const id = req.session.user?.id;
+router.get("/list/:id", async (req, res) => {
+  const { id } = req.params;
 
   try {
     const posts = await getPosts(id);
