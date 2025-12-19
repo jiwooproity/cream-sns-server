@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema(
       type: { url: String, public_id: String },
       default: { url: defaultProfile, public_id: "" },
     },
+    postCount: { type: Number, default: 0 },
+    followerCount: { type: Number, default: 0 },
+    followingCount: { type: Number, default: 0 },
   },
   {
     toJSON: {
