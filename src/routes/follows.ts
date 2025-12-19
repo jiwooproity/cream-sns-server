@@ -1,21 +1,9 @@
 import express from "express";
 
-import Follows from "@/models/follows";
+import * as controller from "@/controllers";
 
 const router = express();
 
-router.post("/add", async (req, res) => {
-  const { targetId } = req.body;
-
-  const id = req.session.user?.id;
-
-  try {
-    const follows = new Follows({ from: id, to: targetId });
-    await follows.save();
-    res.status(200).json({ message: "팔로우 완료" });
-  } catch (e) {
-    res.status(500).json({ message: "팔로우 요청을 실패하였습니다." });
-  }
-});
+router.post("/add", controller.addFollows);
 
 export default router;
