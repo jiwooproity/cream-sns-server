@@ -30,3 +30,8 @@ export interface DeleteParams {
   postId: string;
   author: string;
 }
+
+export interface EditPostParams {
+  postId: string;
+  content: string;
+}

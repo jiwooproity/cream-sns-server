@@ -57,3 +57,18 @@ export async function deletePost(req: Request<Types.DeleteParams>, res: Response
     if (e instanceof Error) res.status(500).json({ message: e.message });
   }
 }
+
+export async function editPost(
+  req: Request<{ postId: string }, {}, { content: string }>,
+  res: Response
+) {
+  const { postId } = req.params;
+  const { content } = req.body;
+
+  try {
+    await service.editPost({ postId, content });
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ message: "게시글 수정에 실패하였습니다." });
+  }
+}
