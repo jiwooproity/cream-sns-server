@@ -58,3 +58,7 @@ export async function deletePost({ postId, author }: Types.DeleteParams): Promis
   await User.updateOne({ _id: author }, { $inc: { postCount: -1 } });
   return deleted;
 }
+
+export async function editPost({ postId, content }: Types.EditPostParams) {
+  await Post.findByIdAndUpdate(postId, { $set: { content } });
+}
