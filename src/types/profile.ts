@@ -2,6 +2,7 @@ import { Types } from "mongoose";
 import { CloudinaryImage } from "./cloudinary";
 
 export interface GetProfileParams {
+  myId: string;
   userId: string;
 }
 
@@ -29,4 +30,9 @@ export interface User {
   postCount: number;
   followerCount: number;
   followingCount: number;
+}
+
+export interface UserWithStatus extends User {
+  id: Types.ObjectId;
+  isFollowed: boolean;
 }

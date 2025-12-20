@@ -1,7 +1,7 @@
-export interface AddFollowsParams {
+export interface FollowsParams {
   targetId: string;
 }
 
-export interface AddFollowsServiceParams extends AddFollowsParams {
+export interface FollowsServiceParams extends FollowsParams {
   userId: string;
 }

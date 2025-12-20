@@ -7,10 +7,11 @@ import * as Types from "@/types/profile";
 import { deleteInCloudinary, uploadToCloudinary } from "@/upload/cloudinary";
 
 export async function getProfile(req: Request<Types.GetProfileParams>, res: Response) {
+  const myId = req.session.user?.id;
   const userId = req.params.userId;
 
   try {
-    const user = await service.getProfile({ userId });
+    const user = await service.getProfile({ myId, userId });
     res.status(200).json(user);
   } catch (e) {
     res.status(500).json({ message: "프로필 조회에 실패하였습니다." });
