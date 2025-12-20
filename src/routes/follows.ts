@@ -4,6 +4,8 @@ import * as controller from "@/controllers";
 
 const router = express();
 
-router.post("/add", controller.addFollows);
+router.post("/", controller.addFollows);
+
+router.delete("/:targetId", controller.unFollows);
 
 export default router;

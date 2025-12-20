@@ -4,14 +4,26 @@ import * as service from "@/services";
 
 import * as Types from "@/types/follows";
 
-export async function addFollows(req: Request<{}, {}, Types.AddFollowsParams>, res: Response) {
+export async function addFollows(req: Request<{}, {}, Types.FollowsParams>, res: Response) {
   const userId = req.session.user?.id;
   const targetId = req.body.targetId;
 
   try {
     await service.addFollows({ userId, targetId });
-    res.status(200).json({ message: "팔로우 완료" });
+    res.sendStatus(200);
   } catch (e) {
-    res.status(500).json({ message: "팔로우 요청을 실패하였습니다." });
+    res.sendStatus(200);
+  }
+}
+
+export async function unFollows(req: Request<Types.FollowsParams>, res: Response) {
+  const userId = req.session.user?.id;
+  const targetId = req.params.targetId;
+
+  try {
+    await service.unFollows({ userId, targetId });
+    res.sendStatus(200);
+  } catch (e) {
+    res.sendStatus(200);
   }
 }
