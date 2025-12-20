@@ -39,6 +39,8 @@
   "_moduleAliases": {
     "@/routes": "dist/routes",
     "@/models": "dist/models",
-    "@/upload": "dist/upload"
+    "@/upload": "dist/upload",
+    "@/controllers": "dist/controllers",
+    "@/services": "dist/services"
   }
 }
