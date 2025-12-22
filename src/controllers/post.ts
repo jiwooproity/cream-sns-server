@@ -37,8 +37,8 @@ export async function createPost(req: Request<{}, {}, Types.CreateParams>, res: 
   const image = await uploadToCloudinary(file!, { folder: "cream/post" });
 
   try {
-    await service.createPost({ author, content, createdAt, image });
-    res.sendStatus(200);
+    const post = await service.createPost({ author, content, createdAt, image });
+    res.status(200).json(post);
   } catch (e) {
     if (image?.public_id) deleteInCloudinary(image.public_id);
     res.status(500).json({ message: "게시글 업로드에 실패하였습니다." });
@@ -66,8 +66,8 @@ export async function editPost(
   const { content } = req.body;
 
   try {
-    await service.editPost({ postId, content });
-    res.sendStatus(200);
+    const post = await service.editPost({ postId, content });
+    res.status(200).json(post);
   } catch (e) {
     res.status(500).json({ message: "게시글 수정에 실패하였습니다." });
   }
