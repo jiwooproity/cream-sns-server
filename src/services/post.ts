@@ -4,16 +4,57 @@ import User from "@/models/user";
 
 // Types
 import * as Types from "@/types/post";
+import mongoose from "mongoose";
 
 /**
  * 작성자를 기준으로 MongoDB에서 게시글 목록을 조회합니다.
  * @param author 작성자 ID
  * @returns 조회된 게시글 목록을 반환합니다.
  */
-export async function getPosts({ author }: Types.GetPostsParams): Promise<Types.Post[]> {
-  return await Post.find({ author }, "-image._id")
-    .sort({ createdAt: -1 })
-    .populate({ path: "author", select: "id nickname profile" });
+export async function getPosts({
+  userId,
+  author,
+}: Types.GetPostsServiceParams): Promise<Types.Post[]> {
+  const post = await Post.aggregate([
+    { $match: { author: new mongoose.Types.ObjectId(author) } },
+    { $sort: { createdAt: -1 } },
+    {
+      $lookup: {
+        from: "likes",
+        let: { postId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $eq: ["$postId", "$$postId"] },
+                  { $eq: ["$userId", new mongoose.Types.ObjectId(userId)] },
+                ],
+              },
+            },
+          },
+        ],
+        as: "liked",
+      },
+    },
+    { $addFields: { isLiked: { $gt: [{ $size: "$liked" }, 0] } } },
+    { $lookup: { from: "users", localField: "author", foreignField: "_id", as: "author" } },
+    { $unwind: "$author" },
+    {
+      $project: {
+        id: "$_id",
+        content: 1,
+        image: 1,
+        createdAt: 1,
+        author: { id: "$author._id", nickname: 1, profile: 1 },
+        likeCount: 1,
+        commentCount: 1,
+        isLiked: 1,
+      },
+    },
+  ]);
+
+  return post;
 }
 
 export async function getPost({ postId }: Types.GetPostParams): Promise<Types.Post> {

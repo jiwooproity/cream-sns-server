@@ -12,6 +12,10 @@ export interface GetPostsParams {
   author: string;
 }
 
+export interface GetPostsServiceParams extends GetPostsParams {
+  userId: string;
+}
+
 export interface GetPostParams {
   postId: string;
 }

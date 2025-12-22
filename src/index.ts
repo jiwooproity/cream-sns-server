@@ -21,6 +21,7 @@ import post from "@/routes/post";
 import follows from "@/routes/follows";
 import feed from "@/routes/feed";
 import search from "@/routes/search";
+import like from "@/routes/like";
 
 // .env
 const { PORT, MONGO_URI, SESSION_SECRET } = process.env;
@@ -53,5 +54,6 @@ app.use("/post", post);
 app.use("/follows", follows);
 app.use("/feed", feed);
 app.use("/search", search);
+app.use("/like", like);
 
 app.listen(PORT, () => console.log(`Server online on port: ${PORT}`));
