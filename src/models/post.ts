@@ -6,6 +6,7 @@ const postSchema = new mongoose.Schema(
     content: { type: String, required: true },
     image: { type: { url: String, public_id: String } },
     createdAt: { type: Number, required: true },
+    commentCount: { type: Number, default: 0 },
   },
   {
     toJSON: {

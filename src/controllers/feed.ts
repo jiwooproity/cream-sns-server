@@ -2,10 +2,8 @@ import { Request, Response } from "express";
 
 import * as service from "@/services";
 
-import * as Types from "@/types/feed";
-
-export async function getFeeds(req: Request<Types.GetFeedsParams>, res: Response) {
-  const userId = req.params.userId;
+export async function getFeeds(req: Request, res: Response) {
+  const userId = req.session.user?.id;
 
   try {
     const feeds = await service.getFeeds({ userId });
