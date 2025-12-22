@@ -11,7 +11,9 @@ import * as Types from "@/types/post";
  * @returns 조회된 게시글 목록을 반환합니다.
  */
 export async function getPosts({ author }: Types.GetPostsParams): Promise<Types.Post[]> {
-  return await Post.find({ author }, "-image._id").sort({ createdAt: -1 });
+  return await Post.find({ author }, "-image._id")
+    .sort({ createdAt: -1 })
+    .populate({ path: "author", select: "id nickname profile" });
 }
 
 export async function getPost({ postId }: Types.GetPostParams): Promise<Types.Post> {
@@ -34,13 +36,20 @@ export async function getPost({ postId }: Types.GetPostParams): Promise<Types.Po
  * @param createdAt 작성 시간
  * @param image 게시글 이미지
  */
-export async function createPost({ author, content, createdAt, image }: Types.CreateServiceParam) {
-  const post = new Post({ author, content, createdAt, image });
-  const saved = await post.save();
+export async function createPost({
+  author,
+  content,
+  createdAt,
+  image,
+}: Types.CreateServiceParam): Promise<Types.Post> {
+  const created = await Post.create({ author, content, createdAt, image });
+  const post = await created.populate({ path: "author", select: "id nickname profile" });
 
-  if (saved._id) {
+  if (post._id) {
     await User.updateOne({ _id: author }, { $inc: { postCount: 1 } });
   }
+
+  return post;
 }
 
 /**
@@ -59,6 +68,16 @@ export async function deletePost({ postId, author }: Types.DeleteParams): Promis
   return deleted;
 }
 
-export async function editPost({ postId, content }: Types.EditPostParams) {
-  await Post.findByIdAndUpdate(postId, { $set: { content } });
+export async function editPost({ postId, content }: Types.EditPostParams): Promise<Types.Post> {
+  const result = await Post.findByIdAndUpdate(
+    postId,
+    { $set: { content } },
+    { new: true }
+  ).populate({ path: "author", select: "id nickname profile" });
+
+  if (!result) {
+    throw new Error("게시글 업데이트에 실패하였습니다.");
+  }
+
+  return result;
 }
