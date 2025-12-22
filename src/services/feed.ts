@@ -23,6 +23,7 @@ export async function getFeeds({ userId }: Types.GetFeedsParams): Promise<Types.
           nickname: 1,
           profile: 1,
         },
+        commentCount: 1,
       },
     },
   ]);

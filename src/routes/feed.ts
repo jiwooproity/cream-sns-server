@@ -4,6 +4,6 @@ import * as controller from "@/controllers";
 
 const router = express();
 
-router.get("/list/:userId", controller.getFeeds);
+router.get("/list", controller.getFeeds);
 
 export default router;
