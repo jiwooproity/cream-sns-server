@@ -7,12 +7,15 @@ import * as Types from "@/types/post";
 import { deleteInCloudinary, uploadToCloudinary } from "@/upload/cloudinary";
 
 export async function getPosts(req: Request<Types.GetPostsParams>, res: Response) {
+  const userId = req.session.user?.id;
   const author = req.params.author;
 
   try {
-    const posts = await service.getPosts({ author });
+    const posts = await service.getPosts({ userId, author });
     res.status(200).json(posts);
   } catch (e) {
+    console.log(e);
+
     res.status(500).json({ message: "게시글 목록을 불러오는데 실패하였습니다." });
   }
 }
