@@ -2,9 +2,19 @@ import { Request, Response } from "express";
 
 import * as service from "@/services";
 
-import * as Types from "@/types/like";
+export async function getLikes(req: Request<{ userId: string }>, res: Response) {
+  const userId = req.params.userId;
+  const myId = req.session.user?.id;
 
-export async function addLike(req: Request<{}, {}, Types.LikeParams>, res: Response) {
+  try {
+    const likes = await service.getLikes({ userId, myId });
+    res.status(200).json(likes);
+  } catch (e) {
+    res.status(500).json({ message: "좋아요 리스트를 불러오는데 실패하였습니다." });
+  }
+}
+
+export async function addLike(req: Request<{}, {}, { postId: string }>, res: Response) {
   const userId = req.session.user?.id;
   const postId = req.body.postId;
 
@@ -16,7 +26,7 @@ export async function addLike(req: Request<{}, {}, Types.LikeParams>, res: Respo
   }
 }
 
-export async function removeLike(req: Request<{}, {}, Types.LikeParams>, res: Response) {
+export async function removeLike(req: Request<{}, {}, { postId: string }>, res: Response) {
   const userId = req.session.user?.id;
   const postId = req.body.postId;
 
