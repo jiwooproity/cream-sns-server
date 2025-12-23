@@ -1,10 +1,12 @@
+import mongoose from "mongoose";
+
 // Models
 import Post from "@/models/post";
 import User from "@/models/user";
+import Likes from "@/models/likes";
 
 // Types
 import * as Types from "@/types/post";
-import mongoose from "mongoose";
 
 /**
  * 작성자를 기준으로 MongoDB에서 게시글 목록을 조회합니다.
@@ -105,6 +107,7 @@ export async function deletePost({ postId, author }: Types.DeleteParams): Promis
     throw new Error("게시글 삭제를 실패하였습니다.");
   }
 
+  await Likes.deleteMany({ postId: deleted.id }, { new: true });
   await User.updateOne({ _id: author }, { $inc: { postCount: -1 } });
   return deleted;
 }
