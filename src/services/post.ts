@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import Post from "@/models/post";
 import User from "@/models/user";
 import Likes from "@/models/likes";
+import Comments from "@/models/comments";
 
 // Types
 import * as Types from "@/types/post";
@@ -109,6 +110,7 @@ export async function deletePost({ postId, author }: Types.DeleteParams): Promis
 
   await Likes.deleteMany({ postId: deleted.id }, { new: true });
   await User.updateOne({ _id: author }, { $inc: { postCount: -1 } });
+  await Comments.deleteMany({ postId });
   return deleted;
 }
 
