@@ -5,8 +5,8 @@ import User from "@/models/user";
 import * as Types from "@/types/auth";
 
 export async function signUp({ nickname, userId, password }: Types.SignUpParams) {
-  const user = new User({ userId, nickname, password });
-  await user.save();
+  const user = await User.create({ userId, nickname, password });
+  if (!user) throw new Error("이미 존재하는 사용자입니다.");
 }
 
 export async function login({ userId, password }: Types.LoginParams): Promise<Types.User> {
