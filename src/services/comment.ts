@@ -13,3 +13,9 @@ export async function addComment({ author, postId, content }: CommentsServicePar
   if (!created) throw new Error("댓글 작성을 실패하였습니다.");
   await Post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
 }
+
+export async function deleteComment({ commentId, postId }: { commentId: string; postId: string }) {
+  const deleted = await Comments.deleteOne({ _id: commentId, postId }, { new: true });
+  if (!deleted) throw new Error("댓글 삭제를 실패하였습니다.");
+  await Post.findByIdAndUpdate(postId, { $inc: { commentCount: -1 } });
+}

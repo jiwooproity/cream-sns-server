@@ -5,4 +5,4 @@ export { getFeeds } from "./feed";
 export { addFollows, unFollows } from "./follows";
 export { searching } from "./search";
 export { addLike, removeLike, getLikes } from "./like";
-export { getComments, addComment } from "./comment";
+export { getComments, addComment, deleteComment } from "./comment";

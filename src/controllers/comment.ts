@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import * as service from "@/services/comment";
+import * as service from "@/services";
 
 export async function getComments(req: Request<{ postId: string }>, res: Response) {
   const postId = req.params.postId;
@@ -23,6 +23,21 @@ export async function addComment(
 
   try {
     await service.addComment({ author, postId, content });
+    res.sendStatus(200);
+  } catch (e) {
+    if (e instanceof Error) res.status(500).json({ message: e.message });
+  }
+}
+
+export async function deleteComment(
+  req: Request<{ commentId: string }, {}, { postId: string }>,
+  res: Response
+) {
+  const commentId = req.params.commentId;
+  const postId = req.body.postId;
+
+  try {
+    await service.deleteComment({ commentId, postId });
     res.sendStatus(200);
   } catch (e) {
     if (e instanceof Error) res.status(500).json({ message: e.message });
